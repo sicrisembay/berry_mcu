@@ -12,7 +12,7 @@ be_extern_native_module(os);
 be_extern_native_module(board);
 /* user-defined modules declare end */
 
-bntvmodule* const be_module_table[] = {
+const bntvmodule_t* const be_module_table[] = {
     /* default modules register */
 #if BE_USE_STRING_MODULE
     &be_native_module(string),
@@ -33,4 +33,8 @@ bntvmodule* const be_module_table[] = {
     &be_native_module(board),
     /* user-defined modules register end */
     NULL /* do not remove */
+};
+
+BERRY_LOCAL bclass_array be_class_table = {
+    NULL,
 };

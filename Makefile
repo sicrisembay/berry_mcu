@@ -1,3 +1,4 @@
+SRCS    += ./middleware/berry/default/be_port.c
 CFLAGS	 = -g -Wall -Wextra -Os
 CFLAGS	+= -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER
 CFLAGS	+= -ffunction-sections -Wl,-gc-sections -mcpu=cortex-m3 -mthumb 
@@ -15,8 +16,8 @@ MKDIR	 = mkdir
 
 BERRY_PATH = middleware/berry
 GENERATE   = generate
-MAP_BUILD  = $(BERRY_PATH)/tools/map_build/map_build
-STR_BUILD  = $(BERRY_PATH)/tools/str_build/str_build
+COC_BUILD  = $(BERRY_PATH)/tools/coc/coc
+PYTHON     = python
 
 INCPATH	 = ./core				\
 	   ./hardware				\
@@ -30,7 +31,7 @@ SRCPATH	 = ./core 				\
 	   ./user
 START 	 = ./core/startup/gcc/startup_stm32f10x_hd.s
 
-SRCS	 = $(foreach dir, $(SRCPATH), $(wildcard $(dir)/*.c))
+SRCS	+= $(foreach dir, $(SRCPATH), $(wildcard $(dir)/*.c))
 OBJS	 = $(patsubst %.c, %.o, $(SRCS))
 DEPS	 = $(patsubst %.c, %.d, $(SRCS))
 CFLAGS	+= $(foreach dir, $(INCPATH), -I"$(dir)")
@@ -62,6 +63,7 @@ $(OBJS): %.o: %.c
 	@ $(CC) $(CFLAGS) -c $< -o $@
 
 sinclude $(DEPS)
+$(OBJS): | prebuild
 
 $(OUTDIR):
 	@ $(MKDIR) $(OUTDIR)
@@ -69,19 +71,10 @@ $(OUTDIR):
 $(GENERATE):
 	@ $(MKDIR) $(GENERATE)
 
-prebuild: $(STR_BUILD) $(MAP_BUILD) $(GENERATE)
+prebuild: $(GENERATE)
 	@ echo [Prebuild] generate resources
-	@ $(MAP_BUILD) $(GENERATE) $(SRCPATH)
-	@ $(STR_BUILD) $(GENERATE) $(SRCPATH) $(GENERATE)
+	@ $(PYTHON) $(COC_BUILD) ./middleware/berry/src ./user -o $(GENERATE) -c ./user/berry_conf.h
 	@ echo done
-
-$(STR_BUILD):
-	@ echo [Make] str_build
-	@ $(MAKE) -C $(BERRY_PATH)/tools/str_build -s
-
-$(MAP_BUILD):
-	@ echo [Make] map_build
-	@ $(MAKE) -C $(BERRY_PATH)/tools/map_build -s
 
 clean:
 	@ echo [Clean...]

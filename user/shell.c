@@ -185,7 +185,7 @@ static void right_key(struct shell *shell)
     }
 }
 
-const char* p_readline(struct shell *shell)
+char* p_readline(struct shell *shell)
 {
     int state = 0;
     for (;;) {
@@ -211,12 +211,17 @@ const char* p_readline(struct shell *shell)
     return NULL;
 }
 
-const char* shell_readline(const char *prompt)
+char* shell_readline(const char *prompt)
 {
     m_shell.prompt = prompt;
     fputs(prompt, stdout);
     fflush(stdout);
     return p_readline(&m_shell);
+}
+
+void shell_freeline(char *line)
+{
+    (void)line;
 }
 
 int shell_addchar(int ch)

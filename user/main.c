@@ -28,7 +28,7 @@ int main(void)
     usart1_config(115200);
     board_init();
     printf(repl_prelude);
-    be_repl(vm, shell_readline);
+    be_repl(vm, shell_readline, shell_freeline);
     be_vm_delete(vm);
     while (1) {
         GPIO_SetBits(GPIOA, GPIO_Pin_8);

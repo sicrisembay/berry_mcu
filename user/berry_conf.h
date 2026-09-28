@@ -1,3 +1,12 @@
+#define BE_USE_FILE_SYSTEM          0
+#define BE_USE_SCRIPT_COMPILER      1
+#define BE_USE_BYTECODE_LOADER      0
+#define BE_CONST_SEARCH_SIZE       50
+#define BE_USE_DEBUG_GC             0
+#define BE_USE_DEBUG_STACK          0
+#define BE_MAX_PARSER_DEPTH        25
+#define BE_STACK_START             50
+#define BE_BYTES_MAX_SIZE          (32 * 1024)
 #ifndef BERRY_CONF_H
 #define BERRY_CONF_H
 
@@ -89,15 +98,4 @@
 /* File operation interface.
  * Modify these macros to port file system support.
  **/
-#define be_fhandle                      FILE *
-#define be_fopen(fname, mode)           fopen(fname, mode)
-#define be_fclose(fp)                   fclose(fp)
-#define be_fwrite(fp, buffer, len)      fwrite(buffer, 1, len, fp)
-#define be_fread(fp, buffer, len)       fread(buffer, 1, len, fp)
-#define be_fgets(fp, buffer, max)       fgets(buffer, max, fp)
-#define be_fseek(fp, pos)               fseek(fp, pos, SEEK_SET)
-#define be_ftell(fp)                    ftell(fp)
-#define be_fflush(fp)                   fflush(fp)
-/* #define be_fsize */
-
 #endif

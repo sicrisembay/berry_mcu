@@ -2,6 +2,7 @@
 #define __SHELL_H
 
 int shell_addchar(int ch);
-const char* shell_readline(const char *prompt);
+char* shell_readline(const char *prompt);
+void shell_freeline(char *line);
 
 #endif
