@@ -1,0 +1,1 @@
+return ["setled", "setdac", "play_sin", "play_rect", "play_tri", "play_stop", "reboot"]

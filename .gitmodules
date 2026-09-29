@@ -1,3 +1,12 @@
 [submodule "middleware/berry"]
 	path = middleware/berry
 	url = https://github.com/sicrisembay/berry.git
+[submodule "drivers/STM32G4xx_HAL_Driver"]
+	path = drivers/STM32G4xx_HAL_Driver
+	url = https://github.com/STMicroelectronics/stm32g4xx-hal-driver.git
+[submodule "drivers/cmsis-device-g4"]
+	path = drivers/cmsis-device-g4
+	url = https://github.com/STMicroelectronics/cmsis-device-g4.git
+[submodule "drivers/CMSIS_5"]
+	path = drivers/CMSIS_5
+	url = https://github.com/ARM-software/CMSIS_5.git
