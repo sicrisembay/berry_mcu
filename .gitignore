@@ -59,6 +59,8 @@ dkms.conf
 *.out.*
 *.user
 .vscode
+ide/**/.settings/
+ide/**/Debug/
 down
 test.txt
 

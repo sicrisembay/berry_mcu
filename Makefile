@@ -42,12 +42,19 @@ OBJS	 = $(patsubst %.c, %.o, $(SRCS))
 DEPS	 = $(patsubst %.c, %.d, $(SRCS))
 CFLAGS	+= $(foreach dir, $(INCPATH), -I"$(dir)")
 else ifeq ($(MCU),g474)
+ifeq ($(debug), 1)
+OUTDIR	 = output/g474_debug
+OPTFLAGS = -Og -g3
+else
 OUTDIR	 = output/g474
+OPTFLAGS = -Os -g
+endif
 TARGET	 = $(OUTDIR)/app
 BERRY_USER_PATH = ./user/g474
 START	 = ./drivers/cmsis-device-g4/Source/Templates/gcc/startup_stm32g474xx.s
 SRCS	 = ./user/g474/main_g474.c \
 	   ./user/g474/boardlib_g474.c \
+	   ./user/g474/syscalls_g474.c \
 	   ./user/be_modtab.c \
 	   ./user/shell.c \
 	   ./middleware/berry/default/be_port.c \
@@ -66,7 +73,7 @@ SRCS	 = ./user/g474/main_g474.c \
 	   ./drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_tim_ex.c
 OBJS	 = $(addprefix $(OUTDIR)/,$(notdir $(SRCS:.c=.o)))
 DEPS	 = $(OBJS:.o=.d)
-CFLAGS	 = -g -Wall -Wextra -Os
+CFLAGS	 = $(OPTFLAGS) -Wall -Wextra
 CFLAGS	+= -ffunction-sections -fdata-sections -mcpu=cortex-m4 -mthumb
 CFLAGS	+= -mfpu=fpv4-sp-d16 -mfloat-abi=hard
 CFLAGS	+= -DSTM32G474xx -DUSE_HAL_DRIVER
@@ -117,6 +124,11 @@ $(OUTDIR)/main_g474.o: ./user/g474/main_g474.c | $(OUTDIR)
 	@ $(CC) $(CFLAGS) -c $< -o $@
 
 $(OUTDIR)/boardlib_g474.o: ./user/g474/boardlib_g474.c | $(OUTDIR)
+	@ echo [Compile] $<
+	@ $(CC) -MM $(CFLAGS) -MT"$(@:.o=.d)" -MT"$@" $< > $(@:.o=.d)
+	@ $(CC) $(CFLAGS) -c $< -o $@
+
+$(OUTDIR)/syscalls_g474.o: ./user/g474/syscalls_g474.c | $(OUTDIR)
 	@ echo [Compile] $<
 	@ $(CC) -MM $(CFLAGS) -MT"$(@:.o=.d)" -MT"$@" $< > $(@:.o=.d)
 	@ $(CC) $(CFLAGS) -c $< -o $@
